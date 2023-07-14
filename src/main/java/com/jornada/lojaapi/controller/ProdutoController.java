@@ -1,8 +1,10 @@
 package com.jornada.lojaapi.controller;
 
 import com.jornada.lojaapi.entity.Produto;
+import com.jornada.lojaapi.exception.RegraDeNegocioException;
 import com.jornada.lojaapi.repository.ProdutoRepository;
 import com.jornada.lojaapi.service.ProdutoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -13,11 +15,12 @@ import java.util.List;
 public class ProdutoController {
 
     // GET POST PUT DELETE...
-    private final ProdutoRepository produtoRepository = new ProdutoRepository();
-    private final ProdutoService produtoService = new ProdutoService(produtoRepository);
+
+    @Autowired
+    private ProdutoService produtoService;
 
     @PostMapping
-    public Produto inserirProduto(@RequestBody Produto produto) throws Exception{
+    public Produto inserirProduto(@RequestBody Produto produto) throws RegraDeNegocioException {
         return produtoService.salvarProduto(produto);
     }
 
@@ -42,7 +45,6 @@ public class ProdutoController {
     public List<Produto> retornarPrecoDosProdutos(@RequestParam("precoInicial") Double precoInicial, @RequestParam("precoFinal") Double precoFinal) {
         List<Produto> produtosNoIntervalo = new ArrayList<>();
         List<Produto> todosOsProdutos = produtoService.listar();
-
         for (Produto produto : todosOsProdutos) {
             if (produto.getPreco() >= precoInicial && produto.getPreco() <= precoFinal) {
                 produtosNoIntervalo.add(produto);
@@ -52,7 +54,7 @@ public class ProdutoController {
         return produtosNoIntervalo;
     }
     @PutMapping
-    public boolean atualizarProduto(@RequestBody Produto produto) throws Exception {
+    public boolean atualizarProduto(@RequestBody Produto produto) throws RegraDeNegocioException {
         return produtoService.editar(produto);
     }
 

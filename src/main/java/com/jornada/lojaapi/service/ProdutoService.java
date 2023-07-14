@@ -1,24 +1,32 @@
 package com.jornada.lojaapi.service;
 
 import com.jornada.lojaapi.entity.Produto;
+import com.jornada.lojaapi.exception.RegraDeNegocioException;
 import com.jornada.lojaapi.repository.ProdutoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service // BEAN
 public class ProdutoService {
 
-    private final ProdutoRepository produtoRepository;
+    @Autowired
+    private ProdutoRepository produtoRepository;
 
     public ProdutoService(ProdutoRepository produtoRepository){
         this.produtoRepository = produtoRepository;
     }
 
-    public Produto salvarProduto(Produto produto) throws Exception {
+    public Produto salvarProduto(Produto produto) throws RegraDeNegocioException {
+        validarProduto(produto);
 
-        return produtoRepository.salvarProdutoDB(produto);
+        Produto produtoSalvo = produtoRepository.salvarProdutoDB(produto);
+        return produtoSalvo;
     }
 
-    public boolean editar(Produto produto) throws Exception {
+    public boolean editar(Produto produto) throws RegraDeNegocioException {
+        validarProduto(produto);
 
         return produtoRepository.editar(produto);
     }
@@ -33,6 +41,16 @@ public class ProdutoService {
 
     public List<Produto> listarPorId(Integer id) {
         return this.produtoRepository.listarPorId(id);
+    }
+
+    public List<Produto> listarPorPreco(Integer id) {
+        return this.produtoRepository.listarPorPreco(id);
+    }
+
+    public void validarProduto(Produto produto) throws RegraDeNegocioException {
+        if(produto.getQuantidade() < 1000) {
+            throw new RegraDeNegocioException("Não deve passar de 1000 produtos");
+        }
     }
 
     public boolean excluir(Integer id) {
