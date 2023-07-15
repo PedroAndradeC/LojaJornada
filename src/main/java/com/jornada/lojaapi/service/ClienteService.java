@@ -1,13 +1,13 @@
 package com.jornada.lojaapi.service;
 
 import com.jornada.lojaapi.entity.Cliente;
-import com.jornada.lojaapi.entity.Produto;
 import com.jornada.lojaapi.exception.RegraDeNegocioException;
 import com.jornada.lojaapi.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ClienteService {
@@ -36,8 +36,8 @@ public class ClienteService {
     }
 
     public void validarCliente(Cliente cliente) throws RegraDeNegocioException {
-        if(cliente.getNome() == null) {
-            throw new RegraDeNegocioException("O cliente deve ter um nome");
+        if(Objects.equals(cliente.getNome(), "") || cliente.getCpf() == null || cliente.getTelefone() == null) {
+            throw new RegraDeNegocioException("O cliente deve ter um nome, cpf e telefone");
         }
     }
     public boolean excluir(Integer idCliente) {
