@@ -48,7 +48,7 @@ public class ProdutoService {
     }
 
     public void validarProduto(Produto produto) throws RegraDeNegocioException {
-        if(produto.getQuantidade() < 1000) {
+        if(produto.getQuantidade() > 1000) {
             throw new RegraDeNegocioException("Não deve passar de 1000 produtos");
         }
     }

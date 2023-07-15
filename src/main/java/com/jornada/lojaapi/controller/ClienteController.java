@@ -1,9 +1,9 @@
 package com.jornada.lojaapi.controller;
 
 import com.jornada.lojaapi.entity.Cliente;
+import com.jornada.lojaapi.exception.RegraDeNegocioException;
 import com.jornada.lojaapi.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,14 +16,14 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
-    @GetMapping("/hello") // localhost:8080/cliente/hello
-    public String meuPrimeiroMetodo() throws Exception{
-        throw new Exception("Minha exception");
-//        return "Hello World";
-    }
+//    @GetMapping("/hello") // localhost:8080/cliente/hello
+//    public String meuPrimeiroMetodo() throws Exception{
+//        throw new Exception("Minha exception");
+////        return "Hello World";
+//    }
 
     @PostMapping
-    public Cliente inserirCliente(@RequestBody Cliente cliente) {
+    public Cliente inserirCliente(@RequestBody Cliente cliente) throws RegraDeNegocioException {
         return clienteService.salvarCliente(cliente);
     }
 
@@ -40,9 +40,8 @@ public class ClienteController {
     }
 
     @PutMapping
-    public boolean atualizarCliente(@RequestBody Cliente cliente) {
-        boolean editado = clienteService.editar(cliente);
-        return editado;
+    public boolean atualizarCliente(@RequestBody Cliente cliente) throws RegraDeNegocioException {
+        return clienteService.editar(cliente);
     }
 
     @DeleteMapping("/{idCliente}")

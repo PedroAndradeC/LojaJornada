@@ -35,9 +35,9 @@ public class ProdutoRepository {
             preparedStatement.setInt(1, proximoId);
             preparedStatement.setString(2, produto.getNome());
             preparedStatement.setInt(3, produto.getQuantidade());
-            preparedStatement.setDouble(3, produto.getPreco());
+            preparedStatement.setDouble(4, produto.getPreco());
             // java.util.Date -> java.sql.Date
-            preparedStatement.setDate(4, new Date(produto.getDataDeValidade().getTime()));
+            preparedStatement.setDate(5, new Date(produto.getDataDeValidade().getTime()));
 
 
             int resposta = preparedStatement.executeUpdate();
@@ -115,9 +115,9 @@ public class ProdutoRepository {
 
             preparedStatement.setString(1, produto.getNome());
             preparedStatement.setInt(2, produto.getQuantidade());
-            preparedStatement.setDouble(2, produto.getPreco());
-            preparedStatement.setDate(3, new Date(produto.getDataDeValidade().getTime()));
-            preparedStatement.setInt(4, produto.getIdProduto());
+            preparedStatement.setDouble(3, produto.getPreco());
+            preparedStatement.setDate(4, new Date(produto.getDataDeValidade().getTime()));
+            preparedStatement.setInt(5, produto.getIdProduto());
 
             //executar
             int resultado = preparedStatement.executeUpdate();

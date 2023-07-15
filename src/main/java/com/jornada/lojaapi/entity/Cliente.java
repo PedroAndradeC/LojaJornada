@@ -4,8 +4,8 @@ public class Cliente {
 
     private Integer idCliente;
     private String nome;
-    private Integer cpf;
-    private Integer telefone;
+    private Long cpf;
+    private Long telefone;
 
     public Integer getIdCliente() {
         return idCliente;
@@ -23,19 +23,19 @@ public class Cliente {
         this.nome = nome;
     }
 
-    public Integer getCpf() {
+    public Long getCpf() {
         return cpf;
     }
 
-    public void setCpf(Integer cpf) {
+    public void setCpf(Long cpf) {
         this.cpf = cpf;
     }
 
-    public Integer getTelefone() {
+    public Long getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(Integer telefone) {
+    public void setTelefone(Long telefone) {
         this.telefone = telefone;
     }
 }

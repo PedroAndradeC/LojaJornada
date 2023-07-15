@@ -34,8 +34,8 @@ public class ClienteRepository {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, proximoId);
             preparedStatement.setString(2, cliente.getNome());
-            preparedStatement.setInt(3, cliente.getCpf());
-            preparedStatement.setInt(3, cliente.getTelefone());
+            preparedStatement.setLong(3, cliente.getCpf());
+            preparedStatement.setLong(4, cliente.getTelefone());
             // java.util.Date -> java.sql.Date
 
             int resposta = preparedStatement.executeUpdate();
@@ -75,8 +75,8 @@ public class ClienteRepository {
                 Cliente cliente = new Cliente();
                 cliente.setIdCliente(res.getInt("id_cliente"));
                 cliente.setNome(res.getString("nome"));
-                cliente.setIdCliente(res.getInt("cpf"));
-                cliente.setIdCliente(res.getInt("telefone"));
+                cliente.setCpf(res.getLong("cpf"));
+                cliente.setTelefone(res.getLong("telefone"));
                 listaClientes.add(cliente);
             }
         } catch (SQLException ex) {
@@ -110,8 +110,8 @@ public class ClienteRepository {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setString(1, cliente.getNome());
-            preparedStatement.setInt(2, cliente.getCpf());
-            preparedStatement.setInt(2, cliente.getTelefone());
+            preparedStatement.setLong(2, cliente.getCpf());
+            preparedStatement.setLong(3, cliente.getTelefone());
             preparedStatement.setInt(4, cliente.getIdCliente());
 
             //executar
@@ -177,8 +177,8 @@ public class ClienteRepository {
                 Cliente cliente = new Cliente();
                 cliente.setIdCliente(res.getInt("id_cliente"));
                 cliente.setNome(res.getString("nome"));
-                cliente.setCpf(res.getInt("cpf"));
-                cliente.setTelefone(res.getInt("telefone"));
+                cliente.setCpf(res.getLong("cpf"));
+                cliente.setTelefone(res.getLong("telefone"));
                 listaClientes.add(cliente);
             }
         } catch (SQLException ex) {
