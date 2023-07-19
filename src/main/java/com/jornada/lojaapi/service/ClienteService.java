@@ -43,5 +43,10 @@ public class ClienteService {
     public boolean excluir(Integer idCliente) {
         return this.clienteRepository.excluir(idCliente);
     }
+
+    public boolean existeClientePorId(Integer idCliente) {
+        List<Cliente> clientes = clienteRepository.listarPorId(idCliente);
+        return !clientes.isEmpty();
+    }
 }
 

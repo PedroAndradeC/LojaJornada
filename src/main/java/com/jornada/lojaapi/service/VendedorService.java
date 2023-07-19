@@ -42,5 +42,10 @@ public class VendedorService {
     public boolean excluir(Integer idVendedor) {
         return this.vendedorRepository.excluir(idVendedor);
     }
+
+    public boolean existeVendedorPorId(Integer idVendedor) {
+        List<Vendedor> vendedores = vendedorRepository.listarPorId(idVendedor);
+        return !vendedores.isEmpty();
+    }
 }
 

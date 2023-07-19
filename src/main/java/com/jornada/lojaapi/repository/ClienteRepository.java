@@ -1,6 +1,7 @@
 package com.jornada.lojaapi.repository;
 
 import com.jornada.lojaapi.entity.Cliente;
+import com.jornada.lojaapi.entity.Produto;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -9,6 +10,8 @@ import java.util.List;
 
 @Repository
 public class ClienteRepository {
+
+
 
     public Cliente salvarClienteDB(Cliente cliente) {
         Connection connection = null;
@@ -70,6 +73,43 @@ public class ClienteRepository {
 
             Statement statement = connection.createStatement();
             ResultSet res = statement.executeQuery(sql);
+
+            while (res.next()) {
+                Cliente cliente = new Cliente();
+                cliente.setIdCliente(res.getInt("id_cliente"));
+                cliente.setNome(res.getString("nome"));
+                cliente.setCpf(res.getLong("cpf"));
+                cliente.setTelefone(res.getLong("telefone"));
+                listaClientes.add(cliente);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            // fechar conexao
+            try {
+                if (connection != null && !connection.isClosed()) {
+                    connection.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return listaClientes;
+    }
+
+    public List<Cliente> listarPorId(Integer id) {
+        List<Cliente> listaClientes = new ArrayList<>();
+
+        Connection connection = null;
+        try {
+            // abrir conexao
+            connection = ConexaoDB.getConnection();
+
+            String sql = "SELECT * FROM CLIENTE where id_cliente = ?";
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, id);
+            ResultSet res = statement.executeQuery();
 
             while (res.next()) {
                 Cliente cliente = new Cliente();

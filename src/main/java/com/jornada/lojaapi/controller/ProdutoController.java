@@ -2,9 +2,13 @@ package com.jornada.lojaapi.controller;
 
 import com.jornada.lojaapi.entity.Produto;
 import com.jornada.lojaapi.exception.RegraDeNegocioException;
-import com.jornada.lojaapi.repository.ProdutoRepository;
 import com.jornada.lojaapi.service.ProdutoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -12,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/produto")
+@Validated
 public class ProdutoController {
 
     // GET POST PUT DELETE...
@@ -19,10 +24,23 @@ public class ProdutoController {
     @Autowired
     private ProdutoService produtoService;
 
+    @Operation(summary = "insere um novo produto", description = "Este processo faz a inserção de um produto na base de dados")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Deu certo"),
+            @ApiResponse(responseCode = "400", description = "erro na validação dos dados"),
+            @ApiResponse(responseCode = "500", description = "erro no servidor")
+    })
+
     @PostMapping
-    public Produto inserirProduto(@RequestBody Produto produto) throws RegraDeNegocioException {
+    public Produto inserirProduto(@RequestBody @Valid Produto produto) throws RegraDeNegocioException {
         return produtoService.salvarProduto(produto);
     }
+
+    @Operation(summary = "retorna todos os produtos", description = "Este processo retorna os produtos da base de dados")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Deu certo"),
+            @ApiResponse(responseCode = "500", description = "erro no servidor")
+    })
 
     @GetMapping
     public List<Produto> retornarTodosOsProdutos(){
@@ -54,7 +72,7 @@ public class ProdutoController {
         return produtosNoIntervalo;
     }
     @PutMapping
-    public boolean atualizarProduto(@RequestBody Produto produto) throws RegraDeNegocioException {
+    public boolean atualizarProduto(@RequestBody @Valid Produto produto) throws RegraDeNegocioException {
         return produtoService.editar(produto);
     }
 
@@ -63,3 +81,4 @@ public class ProdutoController {
         return produtoService.excluir(id);
     }
 }
+

@@ -1,10 +1,18 @@
 package com.jornada.lojaapi.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Positive;
+
 public class Cliente {
 
+    @Schema(description = "código identificador do cliente", example = "5")
+    @Positive
     private Integer idCliente;
+    @Schema(description = "nome do cliente", example = "Pedro Andrade")
     private String nome;
+    @Schema(description = "cpf do cliente", example = "123456789999")
     private Long cpf;
+    @Schema(description = "número de telefone do cliente", example = "82999998888")
     private Long telefone;
 
     public Integer getIdCliente() {

@@ -47,6 +47,19 @@ public class ProdutoService {
         return this.produtoRepository.listarPorPreco(id);
     }
 
+    public boolean existeProdutoPorId(Integer id) {
+        List<Produto> produtos = produtoRepository.listarPorId(id);
+        return !produtos.isEmpty();
+    }
+
+    public int quantidadeDisponivel(Integer id) {
+        List<Produto> produtos = produtoRepository.listarPorId(id);
+        if(!produtos.isEmpty()) {
+            Produto produto = produtos.get(0);
+            return produto.getQuantidade();
+        }
+        return 0;
+    }
     public void validarProduto(Produto produto) throws RegraDeNegocioException {
         if(produto.getQuantidade() > 1000) {
             throw new RegraDeNegocioException("Não deve passar de 1000 produtos");

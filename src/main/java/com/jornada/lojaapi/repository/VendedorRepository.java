@@ -1,6 +1,7 @@
 package com.jornada.lojaapi.repository;
 
 
+import com.jornada.lojaapi.entity.Cliente;
 import com.jornada.lojaapi.entity.Vendedor;
 import org.springframework.stereotype.Repository;
 
@@ -172,6 +173,43 @@ public class VendedorRepository {
 
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, "%" + nome + "%");
+            ResultSet res = statement.executeQuery();
+
+            while (res.next()) {
+                Vendedor vendedor = new Vendedor();
+                vendedor.setIdVendedor(res.getInt("id_vendedor"));
+                vendedor.setNome(res.getString("nome"));
+                vendedor.setCpf(res.getLong("cpf"));
+                vendedor.setTelefone(res.getLong("telefone"));
+                listaVendedores.add(vendedor);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            // fechar conexao
+            try {
+                if (connection != null && !connection.isClosed()) {
+                    connection.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return listaVendedores;
+    }
+
+    public List<Vendedor> listarPorId(Integer idVendedor) {
+        List<Vendedor> listaVendedores = new ArrayList<>();
+
+        Connection connection = null;
+        try {
+            // abrir conexao
+            connection = ConexaoDB.getConnection();
+
+            String sql = "SELECT * FROM VENDEDOR where id_vendedor = ?";
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, idVendedor);
             ResultSet res = statement.executeQuery();
 
             while (res.next()) {
