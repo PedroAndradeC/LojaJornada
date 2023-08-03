@@ -1,5 +1,6 @@
 package com.jornada.lojaapi.controller;
 
+import com.jornada.lojaapi.dto.ClienteDTO;
 import com.jornada.lojaapi.entity.Cliente;
 import com.jornada.lojaapi.exception.RegraDeNegocioException;
 import com.jornada.lojaapi.service.ClienteService;
@@ -36,8 +37,8 @@ public class ClienteController {
     })
 
     @PostMapping
-    public Cliente inserirCliente(@RequestBody @Valid Cliente cliente) throws RegraDeNegocioException {
-        return clienteService.salvarCliente(cliente);
+    public ClienteDTO inserirCliente(@RequestBody @Valid ClienteDTO clienteDTO) throws RegraDeNegocioException {
+        return clienteService.salvarCliente(clienteDTO);
     }
 
     @Operation(summary = "retorna todos os clientes", description = "Este processo retorna os clientes da base de dados")
@@ -48,21 +49,40 @@ public class ClienteController {
 
 
     @GetMapping
-    public List<Cliente> retornarTodosOsClientes(){
+    public List<ClienteDTO> retornarTodosOsClientes(){
         return clienteService.listar();
     }
 
+    @Operation(summary = "retorna um cliente por nome", description = "Este processo retorna um cliente por nome da base de dados")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Deu certo"),
+            @ApiResponse(responseCode = "500", description = "erro no servidor")
+    })
     // PATH VARIABLE
     // REQUEST PARAM
     @GetMapping("/listar-por-nome") // localhost:8080/cliente/listar-por-nome?nomeDoCliente=MEUNOME
-    public List<Cliente> retornarTodosOsClientes(@RequestParam("nomeDoCliente") String nome){
+    public List<ClienteDTO> retornarTodosOsClientes(@RequestParam("nomeDoCliente") String nome){
         return clienteService.listarPorNome(nome);
     }
 
+    @Operation(summary = "atualiza um cliente", description = "Este processo faz a atualização de um cliente na base de dados")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Deu certo"),
+            @ApiResponse(responseCode = "400", description = "erro na validação dos dados"),
+            @ApiResponse(responseCode = "500", description = "erro no servidor")
+    })
+
     @PutMapping
-    public boolean atualizarCliente(@RequestBody @Valid Cliente cliente) throws RegraDeNegocioException {
-        return clienteService.editar(cliente);
+    public boolean atualizarCliente(@RequestBody @Valid ClienteDTO clienteDTO) throws RegraDeNegocioException {
+        return clienteService.editar(clienteDTO);
     }
+
+    @Operation(summary = "deleta um cliente", description = "Este processo faz a remoção de um cliente na base de dados")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Deu certo"),
+            @ApiResponse(responseCode = "400", description = "erro na validação dos dados"),
+            @ApiResponse(responseCode = "500", description = "erro no servidor")
+    })
 
     @DeleteMapping("/{idCliente}")
     public boolean remover(@PathVariable("idCliente") Integer id){

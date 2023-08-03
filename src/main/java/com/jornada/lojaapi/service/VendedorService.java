@@ -1,8 +1,13 @@
 package com.jornada.lojaapi.service;
 
+import com.jornada.lojaapi.dto.ProdutoDTO;
+import com.jornada.lojaapi.dto.VendedorDTO;
+import com.jornada.lojaapi.entity.Produto;
 import com.jornada.lojaapi.entity.Vendedor;
 import com.jornada.lojaapi.exception.RegraDeNegocioException;
+import com.jornada.lojaapi.mapper.VendedorMapper;
 import com.jornada.lojaapi.repository.VendedorRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,32 +15,43 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 public class VendedorService {
-    @Autowired
-    private VendedorRepository vendedorRepository;
 
-    public Vendedor salvarVendedor(Vendedor vendedor) throws RegraDeNegocioException {
-        validarVendedor(vendedor);
+    private final VendedorRepository vendedorRepository;
+    private final VendedorMapper vendedorMapper;
+
+    public VendedorDTO salvarVendedor(VendedorDTO vendedorDTO) throws RegraDeNegocioException {
+        validarVendedor(vendedorDTO);
+        Vendedor vendedorConvertido = vendedorMapper.converteParaEntity(vendedorDTO);
         // salvo no banco e retorno...
-        return vendedorRepository.salvarVendedorDB(vendedor);
+        Vendedor vendedorSalvo =  vendedorRepository.salvarVendedorDB(vendedorConvertido);
+        return vendedorMapper.converteParaDto(vendedorSalvo);
     }
 
-    public boolean editar(Vendedor vendedor) throws RegraDeNegocioException {
-        validarVendedor(vendedor);
+    public boolean editar(VendedorDTO vendedorDTO) throws RegraDeNegocioException {
+        validarVendedor(vendedorDTO);
+        Vendedor vendedorConvertido = vendedorMapper.converteParaEntity(vendedorDTO);
 
-        return vendedorRepository.editar(vendedor);
+        return vendedorRepository.editar(vendedorConvertido);
     }
 
-    public List<Vendedor> listar() {
-        return this.vendedorRepository.listar();
+    public List<VendedorDTO> listar() {
+        List<VendedorDTO> listaDeDtos = this.vendedorRepository.listar().stream()
+                .map(entidade -> vendedorMapper.converteParaDto(entidade))
+                .toList();
+        return listaDeDtos;
     }
 
-    public List<Vendedor> listarPorNome(String nome) {
-        return this.vendedorRepository.listarPorNome(nome);
+    public List<VendedorDTO> listarPorNome(String nome) {
+        List<VendedorDTO> listaDeDtos = this.vendedorRepository.listarPorNome(nome).stream()
+                .map(entidade -> vendedorMapper.converteParaDto(entidade))
+                .toList();
+        return listaDeDtos;
     }
 
-    public void validarVendedor(Vendedor vendedor) throws RegraDeNegocioException {
-        if(Objects.equals(vendedor.getNome(), "") || vendedor.getCpf() == null || vendedor.getTelefone() == null) {
+    public void validarVendedor(VendedorDTO vendedorDTO) throws RegraDeNegocioException {
+        if(Objects.equals(vendedorDTO.getNome(), "") || vendedorDTO.getCpf() == null || vendedorDTO.getTelefone() == null) {
             throw new RegraDeNegocioException("O vendedor deve ter um nome, cpf e telefone");
         }
     }
@@ -44,8 +60,10 @@ public class VendedorService {
     }
 
     public boolean existeVendedorPorId(Integer idVendedor) {
-        List<Vendedor> vendedores = vendedorRepository.listarPorId(idVendedor);
-        return !vendedores.isEmpty();
+        List<VendedorDTO> listaDeDtos = this.vendedorRepository.listarPorId(idVendedor).stream()
+                .map(entidade -> vendedorMapper.converteParaDto(entidade))
+                .toList();
+        return !listaDeDtos.isEmpty();
     }
 }
 

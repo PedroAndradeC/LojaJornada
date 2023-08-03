@@ -1,5 +1,6 @@
 package com.jornada.lojaapi.controller;
 
+import com.jornada.lojaapi.dto.VendaDTO;
 import com.jornada.lojaapi.entity.Venda;
 import com.jornada.lojaapi.exception.RegraDeNegocioException;
 import com.jornada.lojaapi.service.VendaService;
@@ -30,7 +31,7 @@ public class VendaController {
     })
 
     @PostMapping
-    public Venda efetuarVenda(@RequestBody @Valid Venda venda) throws RegraDeNegocioException {
+    public VendaDTO efetuarVenda(@RequestBody @Valid VendaDTO venda) throws RegraDeNegocioException {
         return vendaService.efetuarVenda(venda);
     }
 }
